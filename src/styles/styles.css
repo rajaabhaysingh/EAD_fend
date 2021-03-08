@@ -1,0 +1,119 @@
+/* font colors */
+.fc_white {
+  color: #ffffff;
+}
+
+/* font size */
+.fss {
+  font-size: 0.8rem;
+}
+.fsm {
+  font-size: 0.9rem;
+}
+.fsn {
+  font-size: 1rem;
+}
+.fsl {
+  font-size: 1.2rem;
+}
+.fsxl {
+  font-size: 1.5rem;
+}
+.fs2x {
+  font-size: 2rem;
+}
+
+/* font styles */
+.fwb {
+  font-weight: bold;
+}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tagline {
+  font-family: "Cedarville Cursive", cursive;
+  font-size: 1.2rem;
+}
+
+/* sizing */
+.w-100 {
+  width: 100%;
+}
+.h-36p {
+  height: 36px;
+}
+.w-36p {
+  width: 36px;
+}
+
+/* padding */
+.pad-8 {
+  padding: 8px;
+  box-sizing: border-box;
+}
+.pad_lr-8 {
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+.pad-0 {
+  padding: 0;
+}
+.mar-0 {
+  margin: 0px;
+}
+
+/* backgrounds */
+
+/* display */
+.f {
+  display: flex;
+}
+.fcol {
+  display: flex;
+  flex-direction: column;
+}
+.fc {
+  display: flex;
+  align-items: center;
+}
+.fcc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.f_spbw {
+  display: flex;
+  justify-content: space-between;
+}
+.fcbw {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.f1 {
+  display: flex;
+  flex: 1;
+}
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* position */
+.rel {
+  position: relative;
+}
+.abs_lt {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* border radius */
+.br-4-4-0-0 {
+  border-radius: 4px 4px 0 0;
+}
