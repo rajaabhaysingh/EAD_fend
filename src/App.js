@@ -11,9 +11,18 @@ import shadows from "./components/mui/shadows";
 
 // routes
 import Home from "./views/home";
+import Jobs from "./views/jobs";
+import Training from "./views/training";
+import Contact from "./views/contact";
+import About from "./views/about";
+import Account from "./views/account";
+import Categories from "./views/categories";
+
+import PrivateRoute from "./components/HOC/PrivateRoute";
 
 // redux
 import { useSelector } from "react-redux";
+import { Redirect } from "react-router";
 
 const App = () => {
   // local state management
@@ -51,7 +60,7 @@ const App = () => {
     themeOptions.textSecondary = "#ccc";
     themeOptions.textTertiary = "#bfb8d6";
     themeOptions.hover = "#111";
-    themeOptions.divider = "#ddd";
+    themeOptions.divider = "#06373a";
     themeOptions.link = "#1f5f5b";
   }
 
@@ -92,9 +101,31 @@ const App = () => {
     <ThemeProvider theme={appTheme}>
       <div className="App">
         <Switch>
-          <Route path="/" exact>
-            <Home helper={helper} />
+          <Route path="/" exact strict>
+            <Home />
           </Route>
+          <Route path="/jobs">
+            <Jobs />
+          </Route>
+          <Route path="/training">
+            <Training />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/contact">
+            <Contact />
+          </Route>
+          <Route path="/categories">
+            <Categories />
+          </Route>
+          <Route path="/login">This is login page</Route>
+          <Route path="/signup">This is signup page</Route>
+          <Route path="/error404">Page not found [404]</Route>
+          <PrivateRoute>
+            <Account />
+          </PrivateRoute>
+          <Redirect to="/error404" />
         </Switch>
       </div>
     </ThemeProvider>

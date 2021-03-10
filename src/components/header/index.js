@@ -40,7 +40,7 @@ import {
 
 // redux
 import { themeAction } from "../../redux/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   headerMain: {
@@ -121,7 +121,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header = ({ helper }) => {
+const Header = ({}) => {
   // local state management
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [moreOptAnchorEl, setMoreOptAnchorEl] = useState(null);
@@ -132,6 +132,7 @@ const Header = ({ helper }) => {
   const globalCls = useGlobalStyles();
 
   const dispatch = useDispatch();
+  const helper = useSelector((state) => state.helper);
 
   const moreOptionOpen = Boolean(moreOptAnchorEl);
   const moreOptionPcOpen = Boolean(moreOptPcAnchorEl);
@@ -149,9 +150,9 @@ const Header = ({ helper }) => {
       icon: <i className="fas fa-briefcase mar_r-4"></i>,
     },
     {
-      title: "Corporate Jobs",
-      link: "/jobs?type=corporate",
-      icon: <i className="fas fa-building mar_r-4"></i>,
+      title: "Job Categories",
+      link: "/categories",
+      icon: <i className="fas fa-th mar_r-4"></i>,
     },
     {
       title: "Training program",
@@ -429,6 +430,7 @@ const Header = ({ helper }) => {
         <div className="fc">
           {headerlinks.map((link, i) => (
             <NavLink
+              exact
               to={link.link}
               key={i}
               className={globalCls.navLink}

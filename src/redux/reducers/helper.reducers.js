@@ -2,11 +2,7 @@ import { helperConstants } from "../actions/constants";
 
 const initialState = {
   themeName: "light",
-
-  fetchLocationError: null,
-  fetchLocationLoading: false,
   fetchLocationData: {},
-  fetchLocationSuccess: false,
 };
 
 export default (state = initialState, action) => {
@@ -15,6 +11,13 @@ export default (state = initialState, action) => {
       state = {
         ...state,
         themeName: action.payload.themeName,
+      };
+      break;
+
+    case helperConstants.FETCH_LOCATION_REQUEST:
+      state = {
+        ...state,
+        fetchLocationData: action.payload.locationInfo,
       };
       break;
 

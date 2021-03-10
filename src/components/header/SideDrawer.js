@@ -133,6 +133,7 @@ const SideDrawer = ({ isMenuOpen, setMenuOpen, headerlinks }) => {
         <ul className="fcol pad-0">
           {headerlinks.map((link, i) => (
             <NavLink
+              exact
               to={link.link}
               key={i}
               className={globalCls.navLink}

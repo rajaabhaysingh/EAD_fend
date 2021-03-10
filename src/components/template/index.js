@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 // styling
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 
 // components

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import clsx from "clsx";
 import "keen-slider/keen-slider.min.css";
+import { Link } from "react-router-dom";
 
 // styling
 import { Button, makeStyles } from "@material-ui/core";
@@ -59,10 +60,6 @@ const HomeCarousel = ({ banner }) => {
   });
 
   useEffect(() => {
-    console.log(banner.getHomeCarouselBannerData);
-  }, [banner]);
-
-  useEffect(() => {
     sliderRef.current.addEventListener("mouseover", () => {
       setPause(true);
     });
@@ -85,7 +82,8 @@ const HomeCarousel = ({ banner }) => {
   return (
     <div ref={sliderRef} className={clsx("keen-slider", cls.root)}>
       {banner?.getHomeCarouselBannerData?.map((slide, i) => (
-        <div
+        <Link
+          to={slide.actionUrl}
           key={i}
           className={clsx(globalCls.imgContainer, "keen-slider__slide")}
         >
@@ -94,7 +92,7 @@ const HomeCarousel = ({ banner }) => {
             src={process.env.REACT_APP_BASE_URL + slide.banner}
             alt=""
           />
-        </div>
+        </Link>
       ))}
     </div>
   );

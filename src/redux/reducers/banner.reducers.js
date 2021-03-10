@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
     case bannerConstants.GET_HOME_CAROUSEL_BANNER_FAILURE:
       state = {
         ...state,
-        getHomeCarouselBannerData: "",
+        getHomeCarouselBannerData: [],
         getHomeCarouselBannerloading: false,
         getHomeCarouselBannerSuccess: false,
         getHomeCarouselBannerError: action.payload.error,
