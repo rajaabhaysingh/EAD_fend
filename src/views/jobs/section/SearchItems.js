@@ -11,7 +11,7 @@ import { Alert } from "@material-ui/lab";
 
 // components
 import Loader from "../../../components/loader";
-import JobCard from "../../../components/jobCard";
+import SearchJobCard from "../components/SearchJobCard";
 
 // assets
 
@@ -190,7 +190,7 @@ const SearchItems = () => {
         ) : search.getSearchResultsSuccess ? (
           search.getSearchResultsData?.jobs?.length > 0 ? (
             search.getSearchResultsData.jobs.map((job) => (
-              <JobCard job={job} key={job._id} />
+              <SearchJobCard job={job} key={job._id} />
             ))
           ) : (
             <Alert className="f1" variant="standard" severity="info">
