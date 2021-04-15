@@ -19,16 +19,14 @@ const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
-const JobSlider = ({ jobList }) => {
+const JobSlider = ({ jobs, title, subTitle }) => {
   const cls = useStyles();
   const globalCls = useGlobalStyles();
 
-  return (
+  return jobs?.getHomeLocalJobsData ? (
     <div className={clsx(globalCls.pad_lr_8_16, "fcol")}>
-      <div className={globalCls.mainTitle}>Recommended jobs near you</div>
-      <div className={globalCls.subTitle}>
-        We recommend jobs based on youy current location and browsing history
-      </div>
+      <div className={globalCls.mainTitle}>{title || ""}</div>
+      <div className={globalCls.subTitle}>{subTitle || ""}</div>
       <div
         className={clsx(
           globalCls.pcOfScr,
@@ -38,8 +36,10 @@ const JobSlider = ({ jobList }) => {
         )}
       >
         <div className={clsx(globalCls.pclr_mobtb, globalCls.pcPadB16)}>
-          {jobList?.length > 0 ? (
-            jobList.map((job) => <JobCard job={job} key={job._id} />)
+          {jobs.getHomeLocalJobsData?.jobs?.length > 0 ? (
+            jobs.getHomeLocalJobsData.jobs.map((job) => (
+              <JobCard job={job} key={job._id} />
+            ))
           ) : (
             <div className={clsx(globalCls.pad_lr_8_16, "f1")}>
               <Alert className="f1" severity="info">
@@ -52,7 +52,7 @@ const JobSlider = ({ jobList }) => {
           )}
         </div>
       </div>
-      <div className="fcc">
+      <div className={clsx("fcc", globalCls.mobMarT8)}>
         <Button
           className={globalCls.rounded}
           variant="contained"
@@ -62,7 +62,7 @@ const JobSlider = ({ jobList }) => {
         </Button>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default JobSlider;

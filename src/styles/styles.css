@@ -36,10 +36,25 @@
   font-family: "Cedarville Cursive", cursive;
   font-size: 1.2rem;
 }
+.txtC {
+  text-align: center;
+}
+.no-decor {
+  text-decoration: none;
+}
+.align-l {
+  text-align: left;
+}
 
 /* sizing */
 .w-100 {
   width: 100%;
+}
+.h-100 {
+  height: 100%;
+}
+.w-50 {
+  width: 50%;
 }
 .h-36p {
   height: 36px;
@@ -47,10 +62,37 @@
 .w-36p {
   width: 36px;
 }
+.w-20p {
+  width: 20px;
+  min-width: 20px;
+}
+.h-20p {
+  height: 20px;
+}
+.w-28p {
+  width: 28px;
+  min-width: 28px;
+}
 
 /* padding */
+.pad-2 {
+  padding: 2px;
+  box-sizing: border-box;
+}
+.pad-4 {
+  padding: 4px;
+  box-sizing: border-box;
+}
 .pad-8 {
   padding: 8px;
+  box-sizing: border-box;
+}
+.pad-16 {
+  padding: 16px;
+  box-sizing: border-box;
+}
+.pad-32 {
+  padding: 32px;
   box-sizing: border-box;
 }
 .pad_lr-16 {
@@ -64,6 +106,9 @@
 .mar-0 {
   margin: 0px;
 }
+.bb {
+  box-sizing: border-box;
+}
 
 /* scroll */
 .sb_hid::-webkit-scrollbar {
@@ -72,6 +117,12 @@
 .sb_hid {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+.of_scr {
+  overflow: scroll;
+}
+.of_hid {
+  overflow: hidden;
 }
 
 /* display */
@@ -110,6 +161,11 @@
   display: flex;
   justify-content: space-between;
 }
+.fcolbw {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .f1 {
   display: flex;
   flex: 1;
@@ -118,6 +174,19 @@
   position: fixed;
   top: 0;
   left: 0;
+}
+.f1bwcol {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.justc {
+  justify-content: center;
+}
+.fend {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* position */
@@ -133,4 +202,16 @@
 /* border radius */
 .br-4-4-0-0 {
   border-radius: 4px 4px 0 0;
+}
+
+/* misc */
+.react-paginate ul {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+  list-style: none;
+}
+
+.react-paginate li {
+  display: inline-block;
 }

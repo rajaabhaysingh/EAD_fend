@@ -1,22 +1,22 @@
 import axiosIntance from "../../helpers/axios";
-import { orderConstants } from "./constants";
+import { paymentConstants } from "./constants";
 
-// createOrder
-export const createOrder = (options) => {
+// initiatePayment
+export const initiatePayment = (options, contextId) => {
   return async (dispatch) => {
     dispatch({
-      type: orderConstants.CREATE_ORDER_REQUEST,
+      type: paymentConstants.CREATE_PAYMENT_REQUEST,
     });
 
     await axiosIntance
-      .post("/api/order/create", options)
+      .post("/payment/initiate", options)
       .then((res) => {
         if (res.status === 201) {
           const { data } = res.data;
 
           let paymentOptions = { ...options };
 
-          paymentOptions.key = data.key_id; // Enter the Key ID generated from the Dashboard
+          paymentOptions.key = data.key_id; // Key ID generated from the Dashboard (from backend)
           paymentOptions.amount = data.amount;
           paymentOptions.currency = data.currency;
           paymentOptions.order_id = data.order_id;
@@ -25,13 +25,13 @@ export const createOrder = (options) => {
           paymentObj.open();
 
           dispatch({
-            type: orderConstants.CREATE_ORDER_SUCCESS,
-            payload: { data: data },
+            type: paymentConstants.CREATE_PAYMENT_SUCCESS,
+            payload: { data: data, contextId: contextId },
           });
         } else {
           dispatch({
-            type: orderConstants.CREATE_ORDER_FAILURE,
-            payload: { error: res.data.error },
+            type: paymentConstants.CREATE_PAYMENT_FAILURE,
+            payload: { error: res.data.error, contextId: contextId },
           });
         }
       })
@@ -39,7 +39,7 @@ export const createOrder = (options) => {
         const tempError = err.response?.data?.error?.error?.description;
 
         dispatch({
-          type: orderConstants.CREATE_ORDER_FAILURE,
+          type: paymentConstants.CREATE_PAYMENT_FAILURE,
           payload: {
             error: tempError
               ? tempError
@@ -48,46 +48,7 @@ export const createOrder = (options) => {
               : err.response?.data?.error?.message ||
                 err.message ||
                 "Some unexpected error ocuured. Try refreshing the page or contact developer if problem persists.",
-          },
-        });
-      });
-  };
-};
-
-// getOrders
-export const getOrders = () => {
-  return async (dispatch) => {
-    dispatch({
-      type: orderConstants.GET_ORDERS_REQUEST,
-    });
-
-    await axiosIntance
-      .get("/api/order/get")
-      .then((res) => {
-        if (res.status === 200) {
-          const { data } = res.data;
-
-          dispatch({
-            type: orderConstants.GET_ORDERS_SUCCESS,
-            payload: { data: data },
-          });
-        } else {
-          dispatch({
-            type: orderConstants.GET_ORDERS_FAILURE,
-            payload: { error: res.data.error },
-          });
-        }
-      })
-      .catch((err) => {
-        dispatch({
-          type: orderConstants.GET_ORDERS_FAILURE,
-          payload: {
-            error:
-              typeof err.response?.data?.error !== "object"
-                ? err.response?.data?.error
-                : err.response?.data?.error?.message ||
-                  err.message ||
-                  "Some unexpected error ocuured. Try refreshing the page or contact developer if problem persists.",
+            contextId: contextId,
           },
         });
       });

@@ -1,22 +1,25 @@
 import axiosIntance from "../../helpers/axios";
 import { authConstants } from "./constants";
 
-// login
-export const login = (user) => {
+// loginAction
+export const loginAction = (formdata, rememberMe) => {
   return async (dispatch) => {
     dispatch({
       type: authConstants.LOGIN_REQUEST,
     });
 
     await axiosIntance
-      .post("/api/login", {
-        ...user,
-      })
+      .post("/auth/login", formdata)
       .then((res) => {
         if (res.status === 200) {
           const { token, data } = res.data;
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(data));
+
+          // if user chooses to remember login
+          if (rememberMe) {
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(data));
+          }
+
           dispatch({
             type: authConstants.LOGIN_SUCCESS,
             payload: {
@@ -88,17 +91,109 @@ export const isUserLoggedIn = () => {
   };
 };
 
+// sendResetPwdLink
+export const sendResetPwdLink = (formdata) => {
+  return async (dispatch) => {
+    dispatch({
+      type: authConstants.SEND_RESET_PWD_REQUEST,
+    });
+
+    await axiosIntance
+      .post("/auth/send-reset-password-link", formdata)
+      .then((res) => {
+        if (res.status === 200) {
+          const { data } = res.data;
+          dispatch({
+            type: authConstants.SEND_RESET_PWD_SUCCESS,
+            payload: {
+              data,
+            },
+          });
+        } else {
+          if (res.status >= 400) {
+            dispatch({
+              type: authConstants.SEND_RESET_PWD_FAILURE,
+              payload: {
+                error: `Unexpected error occured. Server responded with error code: ${res.status}`,
+              },
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        dispatch({
+          type: authConstants.SEND_RESET_PWD_FAILURE,
+          payload: {
+            error:
+              typeof err.response?.data?.error !== "object"
+                ? err.response?.data?.error
+                : err.response?.data?.error?.message ||
+                  err.message ||
+                  "Some unexpected error ocuured. Try refreshing the page or contact developer if problem persists.",
+          },
+        });
+      });
+  };
+};
+
+// verifyResetPwd
+export const verifyResetPwd = (formdata) => {
+  return async (dispatch) => {
+    dispatch({
+      type: authConstants.VERIFY_RESET_PWD_REQUEST,
+    });
+
+    await axiosIntance
+      .post("/auth/verify-reset-password", formdata)
+      .then((res) => {
+        if (res.status === 200) {
+          const { data } = res.data;
+          dispatch({
+            type: authConstants.VERIFY_RESET_PWD_SUCCESS,
+            payload: {
+              data,
+            },
+          });
+        } else {
+          if (res.status >= 400) {
+            dispatch({
+              type: authConstants.VERIFY_RESET_PWD_FAILURE,
+              payload: {
+                error: `Unexpected error occured. Server responded with error code: ${res.status}`,
+              },
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        dispatch({
+          type: authConstants.VERIFY_RESET_PWD_FAILURE,
+          payload: {
+            error:
+              typeof err.response?.data?.error !== "object"
+                ? err.response?.data?.error
+                : err.response?.data?.error?.message ||
+                  err.message ||
+                  "Some unexpected error ocuured. Try refreshing the page or contact developer if problem persists.",
+          },
+        });
+      });
+  };
+};
+
 // logout
-export const logout = () => {
+export const logout = (history) => {
   return async (dispatch) => {
     dispatch({ type: authConstants.LOGOUT_REQUEST });
 
     await axiosIntance
-      .post("/api/admin/logout")
+      .post("/auth/logout")
       .then((res) => {
         if (res.status === 200) {
-          localStorage.clear();
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
           dispatch({ type: authConstants.LOGOUT_SUCCESS });
+          history.push("/");
         } else {
           dispatch({
             type: authConstants.LOGOUT_FAILURE,
@@ -119,5 +214,16 @@ export const logout = () => {
           },
         });
       });
+  };
+};
+
+// clearAuth
+export const clearAuth = () => {
+  return async (dispatch) => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    dispatch({
+      type: authConstants.AUTH_CLEAR,
+    });
   };
 };

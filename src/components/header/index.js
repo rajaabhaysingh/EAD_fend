@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
+import clsx from "clsx";
 
 // styling
 import {
@@ -10,10 +11,12 @@ import {
   makeStyles,
   Menu,
   MenuItem,
+  Modal,
 } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 
 // components
+import LocationAutoComplete from "./LocationAutoComplete";
 import { Divide as Hamburger } from "hamburger-react";
 import SideDrawer from "./SideDrawer";
 
@@ -26,10 +29,12 @@ import { paperLightLight, paperLightDark } from "../../styles/colors";
 
 // icons
 import {
+  AccountCircle,
   AccountCircleTwoTone,
   BallotTwoTone,
   Brightness4TwoTone,
   BrightnessHighTwoTone,
+  CloseTwoTone,
   DescriptionTwoTone,
   EmailTwoTone,
   LanguageTwoTone,
@@ -39,10 +44,31 @@ import {
 } from "@material-ui/icons";
 
 // redux
-import { themeAction } from "../../redux/actions";
+import { themeAction, logout, changeMargin } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { isLoggedIn } from "../../helpers/misc";
 
 const useStyles = makeStyles((theme) => ({
+  searchVisible: {
+    display: "flex",
+    flexDirection: "column",
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "84px",
+      transition: "ease-in 0.25s",
+    },
+  },
+  searchHidden: {
+    display: "flex",
+    flexDirection: "column",
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100%",
+  },
   headerMain: {
     backgroundColor: theme.palette.background.bg,
     width: "100%",
@@ -101,6 +127,16 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.85rem",
     color: theme.palette.primary.main,
     cursor: "pointer",
+    background: theme.palette.background.bg,
+    display: "flex",
+    alignItems: "center",
+    overflow: "scroll",
+    [theme.breakpoints.down("sm")]: {
+      padding: "4px 8px",
+      height: "28px",
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      borderTop: `1px solid ${theme.palette.divider}`,
+    },
   },
   searchBar: {
     marginRight: "16px",
@@ -119,20 +155,36 @@ const useStyles = makeStyles((theme) => ({
       width: "100vw",
     },
   },
+  modal: {
+    backgroundColor: theme.palette.background.bg,
+    border: `1px solid ${theme.palette.divider}`,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    width: "90vw",
+    maxWidth: "620px",
+    maxHeight: "70vh",
+    overflow: "scroll",
+    zIndex: 99999,
+    marginTop: "60px",
+  },
 }));
 
 const Header = ({}) => {
-  // local state management
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [moreOptAnchorEl, setMoreOptAnchorEl] = useState(null);
-  const [moreOptPcAnchorEl, setMoreOptPcAnchorEl] = useState(null);
-  const [mobSearchVisible, setMobSearchVisible] = useState(false);
-
   const cls = useStyles();
   const globalCls = useGlobalStyles();
-
+  const history = useHistory();
   const dispatch = useDispatch();
   const helper = useSelector((state) => state.helper);
+
+  // local state management
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [moreOptAnchorEl, setMoreOptAnchorEl] = useState(null);
+  const [moreOptPcAnchorEl, setMoreOptPcAnchorEl] = useState(null);
+  const [mobSearchVisible, setMobSearchVisible] = useState(
+    helper.marginTop ? true : false
+  );
 
   const moreOptionOpen = Boolean(moreOptAnchorEl);
   const moreOptionPcOpen = Boolean(moreOptPcAnchorEl);
@@ -175,6 +227,7 @@ const Header = ({}) => {
   const handleMoreOptionsClick = (event) => {
     if (mobSearchVisible) {
       setMobSearchVisible(false);
+      // dispatch(changeMargin(false));
     }
     setMoreOptAnchorEl(event.currentTarget);
   };
@@ -204,38 +257,70 @@ const Header = ({}) => {
   // handleSearchSubmit
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+
+    history.push(`/jobs?q=${searchText}`);
   };
 
   // handleMobSearchToggle
   const handleMobSearchToggle = () => {
+    setMobSearchVisible(!mobSearchVisible);
+
     if (mobSearchVisible) {
-      setMobSearchVisible(false);
+      dispatch(changeMargin(false));
     } else {
-      setMobSearchVisible(true);
+      dispatch(changeMargin(true));
     }
+
+    if (moreOptionOpen) {
+      setMoreOptAnchorEl(null);
+    }
+  };
+
+  // handleLogout
+  const handleLogout = () => {
+    dispatch(logout(history));
   };
 
   // renderSearchBar
   const renderSearchBar = () => {
     return (
-      <form className={cls.searchBar} onSubmit={handleSearchSubmit}>
-        <input
-          className={globalCls.inputSearch}
-          type="text"
-          name="searchText"
-          placeholder="Search jobs"
-        />
-        <button type="submit" className={globalCls.searchBtn}>
-          <SearchTwoTone />
-        </button>
-      </form>
+      <>
+        <form className={cls.searchBar} onSubmit={handleSearchSubmit}>
+          <input
+            className={globalCls.inputSearch}
+            type="text"
+            name="searchText"
+            placeholder="Search jobs"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+          <button type="submit" className={globalCls.searchBtn}>
+            <SearchTwoTone />
+          </button>
+        </form>
+        <Hidden mdUp implementation="css">
+          <div
+            className={cls.locationText}
+            onClick={() => setLocationOpen(true)}
+          >
+            <i className="fas fa-map-marker-alt mar_r-8"></i>
+            <span className={globalCls.simpleLabel}>Current location: </span>
+            <span className="ellipsis" style={{ maxWidth: "300px" }}>
+              {helper.fetchLocationData?.location?.address
+                ? helper.fetchLocationData.location.address
+                : "All India (default)"}
+            </span>
+          </div>
+        </Hidden>
+      </>
     );
   };
 
   return (
-    <div className="fcol fixed w-100" style={{ zIndex: "9999" }}>
+    <div className={cls.searchHidden} style={{ zIndex: "9999" }}>
       <div className={cls.headerMain}>
         <div className="fc">
+          {/* mob view */}
           <Hidden mdUp implementation="css">
             <Hamburger
               rounded
@@ -262,118 +347,21 @@ const Header = ({}) => {
           {/* for mobile */}
           <Hidden mdUp implementation="css">
             <IconButton color="inherit" onClick={handleMobSearchToggle}>
-              <SearchTwoTone />
+              {mobSearchVisible ? <CloseTwoTone /> : <SearchTwoTone />}
             </IconButton>
             <IconButton color="inherit" onClick={handleMoreOptionsClick}>
               <MoreVert />
             </IconButton>
-            <Menu
-              anchorEl={moreOptAnchorEl}
-              keepMounted
-              open={moreOptionOpen}
-              onClose={handleMoreOptClose}
-              PaperProps={{
-                style: {
-                  width: "20ch",
-                  marginTop: "60px",
-                  boxSizing: "border-box",
-                  borderRadius: "4px",
-                  border: `1px solid rgba(0,0,0,0.25)`,
-                  boxShadow: "0 0 8px rgba(0,0,0,0.15)",
-                  backgroundColor:
-                    helper.themeName === "light"
-                      ? paperLightLight
-                      : paperLightDark,
-                },
-              }}
-            >
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <NotificationsActiveTwoTone color="primary" />
-                  <div className="fs mar_l-12">Notifications</div>
-                </div>
-              </MenuItem>
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <EmailTwoTone color="primary" />
-                  <div className="fs mar_l-12">Messages</div>
-                </div>
-              </MenuItem>
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <AccountCircleTwoTone color="primary" />
-                  <div className="fs mar_l-12">Account</div>
-                </div>
-              </MenuItem>
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <DescriptionTwoTone color="primary" />
-                  <div className="fs mar_l-12">My Applications</div>
-                </div>
-              </MenuItem>
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <BallotTwoTone color="primary" />
-                  <div className="fs mar_l-12">My Postings</div>
-                </div>
-              </MenuItem>
-              <Divider className={globalCls.marTB_8} />
-              <MenuItem className={globalCls.menuItemPri}>
-                <div className="fc fsm">
-                  <LanguageTwoTone color="primary" />
-                  <div className="fs mar_l-12">Language</div>
-                </div>
-              </MenuItem>
-              <MenuItem
-                className={globalCls.menuItemPri}
-                onClick={handleThemeToggle}
-              >
-                {helper.themeName === "light" ? (
-                  <div className="fc fsm">
-                    <Brightness4TwoTone color="primary" />
-                    <div className="fs mar_l-12">Dark Mode</div>
-                  </div>
-                ) : (
-                  <div className="fc fsm">
-                    <BrightnessHighTwoTone color="primary" />
-                    <div className="fs mar_l-12">Light mode</div>
-                  </div>
-                )}
-              </MenuItem>
-              <Divider className={globalCls.marTB_8} />
-              <MenuItem>
-                <Button fullWidth variant="contained" onClick={() => {}}>
-                  Logout
-                </Button>
-              </MenuItem>
-            </Menu>
-          </Hidden>
-          {/* for pc */}
-          <Hidden smDown implementation="css">
-            <div className="fc">
-              {renderSearchBar()}
-              <IconButton color="primary">
-                <LanguageTwoTone />
-              </IconButton>
-              <IconButton color="primary" onClick={handleThemeToggle}>
-                {helper.themeName === "light" ? (
-                  <Brightness4TwoTone />
-                ) : (
-                  <BrightnessHighTwoTone />
-                )}
-              </IconButton>
-              <IconButton color="primary" onClick={handlePcMoreOptionsClick}>
-                <MoreVert />
-              </IconButton>
+            {isLoggedIn() ? (
               <Menu
-                anchorEl={moreOptPcAnchorEl}
+                anchorEl={moreOptAnchorEl}
                 keepMounted
-                open={moreOptionPcOpen}
-                onClose={handleMoreOptPcClose}
+                open={moreOptionOpen}
+                onClose={handleMoreOptClose}
                 PaperProps={{
                   style: {
                     width: "20ch",
-                    marginTop: "92px",
+                    marginTop: "60px",
                     boxSizing: "border-box",
                     borderRadius: "4px",
                     border: `1px solid rgba(0,0,0,0.25)`,
@@ -391,37 +379,177 @@ const Header = ({}) => {
                     <div className="fs mar_l-12">Notifications</div>
                   </div>
                 </MenuItem>
+                <Divider className={globalCls.marTB_8} />
                 <MenuItem className={globalCls.menuItemPri}>
                   <div className="fc fsm">
-                    <EmailTwoTone color="primary" />
-                    <div className="fs mar_l-12">Messages</div>
+                    <LanguageTwoTone color="primary" />
+                    <div className="fs mar_l-12">Language</div>
                   </div>
                 </MenuItem>
-                <MenuItem className={globalCls.menuItemPri}>
-                  <div className="fc fsm">
-                    <AccountCircleTwoTone color="primary" />
-                    <div className="fs mar_l-12">Account</div>
-                  </div>
-                </MenuItem>
-                <MenuItem className={globalCls.menuItemPri}>
-                  <div className="fc fsm">
-                    <DescriptionTwoTone color="primary" />
-                    <div className="fs mar_l-12">My Applications</div>
-                  </div>
-                </MenuItem>
-                <MenuItem className={globalCls.menuItemPri}>
-                  <div className="fc fsm">
-                    <BallotTwoTone color="primary" />
-                    <div className="fs mar_l-12">My Postings</div>
-                  </div>
+                <MenuItem
+                  className={globalCls.menuItemPri}
+                  onClick={handleThemeToggle}
+                >
+                  {helper.themeName === "light" ? (
+                    <div className="fc fsm">
+                      <Brightness4TwoTone color="primary" />
+                      <div className="fs mar_l-12">Dark Mode</div>
+                    </div>
+                  ) : (
+                    <div className="fc fsm">
+                      <BrightnessHighTwoTone color="primary" />
+                      <div className="fs mar_l-12">Light mode</div>
+                    </div>
+                  )}
                 </MenuItem>
                 <Divider className={globalCls.marTB_8} />
-                <MenuItem>
-                  <Button fullWidth variant="contained" onClick={() => {}}>
+                <MenuItem onClick={handleLogout}>
+                  <Button fullWidth variant="contained">
                     Logout
                   </Button>
                 </MenuItem>
               </Menu>
+            ) : (
+              <Menu
+                anchorEl={moreOptAnchorEl}
+                keepMounted
+                open={moreOptionOpen}
+                onClose={handleMoreOptClose}
+                PaperProps={{
+                  style: {
+                    width: "20ch",
+                    marginTop: "60px",
+                    boxSizing: "border-box",
+                    borderRadius: "4px",
+                    border: `1px solid rgba(0,0,0,0.25)`,
+                    boxShadow: "0 0 8px rgba(0,0,0,0.15)",
+                    backgroundColor:
+                      helper.themeName === "light"
+                        ? paperLightLight
+                        : paperLightDark,
+                  },
+                }}
+              >
+                <MenuItem onClick={() => history.push("/login")}>
+                  <Button fullWidth variant="contained">
+                    Login/Signup
+                  </Button>
+                </MenuItem>
+              </Menu>
+            )}
+          </Hidden>
+          {/* for pc */}
+          <Hidden smDown implementation="css">
+            <div className="fc">
+              {renderSearchBar()}
+              <IconButton color="primary">
+                <LanguageTwoTone />
+              </IconButton>
+              <IconButton color="primary" onClick={handleThemeToggle}>
+                {helper.themeName === "light" ? (
+                  <Brightness4TwoTone />
+                ) : (
+                  <BrightnessHighTwoTone />
+                )}
+              </IconButton>
+              <IconButton color="primary" onClick={handlePcMoreOptionsClick}>
+                <AccountCircle />
+              </IconButton>
+              {isLoggedIn() ? (
+                <Menu
+                  anchorEl={moreOptPcAnchorEl}
+                  keepMounted
+                  open={moreOptionPcOpen}
+                  onClose={handleMoreOptPcClose}
+                  PaperProps={{
+                    style: {
+                      width: "20ch",
+                      marginTop: "92px",
+                      boxSizing: "border-box",
+                      borderRadius: "4px",
+                      border: `1px solid rgba(0,0,0,0.25)`,
+                      boxShadow: "0 0 8px rgba(0,0,0,0.15)",
+                      backgroundColor:
+                        helper.themeName === "light"
+                          ? paperLightLight
+                          : paperLightDark,
+                    },
+                  }}
+                >
+                  <MenuItem className={globalCls.menuItemPri}>
+                    <div className="fc fsm">
+                      <NotificationsActiveTwoTone color="primary" />
+                      <div className="fs mar_l-12">Notifications</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem className={globalCls.menuItemPri}>
+                    <div className="fc fsm">
+                      <EmailTwoTone color="primary" />
+                      <div className="fs mar_l-12">Messages</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    className={globalCls.menuItemPri}
+                    onClick={() => history.push("/account")}
+                  >
+                    <div className="fc fsm">
+                      <AccountCircleTwoTone color="primary" />
+                      <div className="fs mar_l-12">Account</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    className={globalCls.menuItemPri}
+                    onClick={() => history.push("/account/my-applications")}
+                  >
+                    <div className="fc fsm">
+                      <DescriptionTwoTone color="primary" />
+                      <div className="fs mar_l-12">My Applications</div>
+                    </div>
+                  </MenuItem>
+                  <MenuItem
+                    className={globalCls.menuItemPri}
+                    onClick={() => history.push("/account/my-postings")}
+                  >
+                    <div className="fc fsm">
+                      <BallotTwoTone color="primary" />
+                      <div className="fs mar_l-12">My Postings</div>
+                    </div>
+                  </MenuItem>
+                  <Divider className={globalCls.marTB_8} />
+                  <MenuItem onClick={handleLogout}>
+                    <Button fullWidth variant="contained">
+                      Logout
+                    </Button>
+                  </MenuItem>
+                </Menu>
+              ) : (
+                <Menu
+                  anchorEl={moreOptPcAnchorEl}
+                  keepMounted
+                  open={moreOptionPcOpen}
+                  onClose={handleMoreOptPcClose}
+                  PaperProps={{
+                    style: {
+                      width: "20ch",
+                      marginTop: "92px",
+                      boxSizing: "border-box",
+                      borderRadius: "4px",
+                      border: `1px solid rgba(0,0,0,0.25)`,
+                      boxShadow: "0 0 8px rgba(0,0,0,0.15)",
+                      backgroundColor:
+                        helper.themeName === "light"
+                          ? paperLightLight
+                          : paperLightDark,
+                    },
+                  }}
+                >
+                  <MenuItem onClick={() => history.push("/login")}>
+                    <Button fullWidth variant="contained">
+                      Login/Signup
+                    </Button>
+                  </MenuItem>
+                </Menu>
+              )}
             </div>
           </Hidden>
         </div>
@@ -440,19 +568,46 @@ const Header = ({}) => {
             </NavLink>
           ))}
         </div>
-        <div className={cls.locationText}>
+        <div className={cls.locationText} onClick={() => setLocationOpen(true)}>
           <i className="fas fa-map-marker-alt mar_r-8"></i>
           <span className={globalCls.simpleLabel}>Current location: </span>
-          <span className="ellipsis" style={{ maxWidth: "200px" }}>
-            {helper.fetchLocationData?.locationText
-              ? helper.fetchLocationData.locationText
+          <span className="ellipsis" style={{ maxWidth: "300px" }}>
+            {helper.fetchLocationData?.location?.address
+              ? helper.fetchLocationData.location.address
               : "All India (default)"}
           </span>
         </div>
       </div>
+      {/* mob visible - search bar */}
       <Hidden mdUp implementation="css">
         {mobSearchVisible ? renderSearchBar() : null}
       </Hidden>
+      <Modal
+        open={locationOpen}
+        onClose={() => setLocationOpen(false)}
+        className="fccc"
+      >
+        <div className={cls.modal}>
+          <div className={globalCls.txtLgSec}>
+            <strong>Select your location</strong>
+          </div>
+          <div className={clsx(globalCls.txtSmSec, "mar_t-4")}>
+            We need your location information to recommend job near me.
+          </div>
+          <div className="fcol">
+            <LocationAutoComplete mar />
+            <Button
+              className={globalCls.marT32}
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={() => setLocationOpen(false)}
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

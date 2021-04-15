@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       borderRadius: "0",
       padding: "16px",
+      maxWidth: "100%",
       minWidth: "100%",
       borderBottom: `1px solid ${theme.palette.divider}`,
     },
@@ -47,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     color: theme.palette.text.primary,
     fontSize: "0.9rem",
+    textOverflow: "wrap",
+    [theme.breakpoints.up("md")]: {
+      maxWidth: "190px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    },
   },
 }));
 
@@ -55,7 +63,7 @@ const JobCard = ({ job }) => {
   const globalCls = useGlobalStyles();
 
   return (
-    <div className={globalCls.hovActive}>
+    <div className={clsx(globalCls.hovActive_cardList, globalCls.pcMarR16)}>
       <Link to={`/jobs/${job._id}`} className={clsx("fcol", cls.root)}>
         <div className={clsx(globalCls.pclr_mobtb, "rel")}>
           <div className={globalCls.pctb_moblr}>
@@ -69,12 +77,12 @@ const JobCard = ({ job }) => {
             >
               <div className={globalCls.txtSmPriCol}>
                 {generateName(
-                  job.owner?.firstName,
-                  job.owner?.middleName,
-                  job.owner?.lastName
+                  job.owner_details[0]?.firstName,
+                  job.owner_details[0]?.middleName,
+                  job.owner_details[0]?.lastName
                 )}
               </div>
-              <div className={clsx(cls.title, "ellipsis")}>
+              <div className={clsx(cls.title)}>
                 {job.name || "Not available"}
               </div>
             </div>
@@ -88,10 +96,10 @@ const JobCard = ({ job }) => {
             <div className="fcol">
               <div className={globalCls.txtSmSec}>
                 <i className="fas fa-map-marker-alt mar_r-4"></i>{" "}
-                {job.location?.pinCode || "N/A"},{" "}
-                {job.location?.cityDistrictTown || "N/A"}
+                {job.location_details[0]?.pinCode || "N/A"},{" "}
+                {job.location_details[0]?.cityDistrictTown || "N/A"}
               </div>
-              <div className={globalCls.txtSmSec}>
+              <div className={clsx(globalCls.txtSmSec, "fwb")}>
                 <i className="fas fa-rupee-sign mar_r-4"></i>{" "}
                 {job.payscale || "N/A"}/{job.payscaleUnit || "N/A"}
               </div>

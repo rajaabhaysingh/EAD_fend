@@ -48,12 +48,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SideDrawer = ({ isMenuOpen, setMenuOpen, headerlinks }) => {
+const SideDrawer = ({ isMenuOpen, setMenuOpen }) => {
   const cls = useStyles();
   const globalCls = useGlobalStyles();
 
   const sideDrawerRef = useRef(null);
   const backdropRef = useRef(null);
+
+  // startLinks
+  const startLinks = [
+    {
+      title: "Home",
+      link: "/",
+      icon: <i className="fas fa-home mar_r-4"></i>,
+    },
+    {
+      title: "All jobs",
+      link: "/jobs",
+      icon: <i className="fas fa-briefcase mar_r-4"></i>,
+    },
+    {
+      title: "Job Categories",
+      link: "/categories",
+      icon: <i className="fas fa-th mar_r-4"></i>,
+    },
+  ];
+
+  // midLinks
+  const midLinks = [
+    {
+      title: "Account",
+      link: "/account",
+      icon: <i className="fas fa-user mar_r-4"></i>,
+    },
+    {
+      title: "My postings",
+      link: "/account/my-postings",
+      icon: <i className="fas fa-briefcase mar_r-4"></i>,
+    },
+    {
+      title: "My applications",
+      link: "/account/my-applications",
+      icon: <i className="fas fa-file-contract mar_r-4"></i>,
+    },
+    {
+      title: "Messages",
+      link: "/account/messages",
+      icon: <i className="fas fa-envelope mar_r-4"></i>,
+    },
+  ];
+
+  // endLinks
+  const endLinks = [
+    {
+      title: "Training program",
+      link: "/training",
+      icon: <i className="fas fa-chalkboard-teacher mar_r-4"></i>,
+    },
+    {
+      title: "About",
+      link: "/about",
+      icon: <i className="fas fa-info-circle mar_r-4"></i>,
+    },
+    {
+      title: "Contacts",
+      link: "/contact",
+      icon: <i className="fas fa-headset mar_r-4"></i>,
+    },
+  ];
 
   // touch and swipe events function
   // side_drawer is in child component as of now
@@ -131,13 +193,42 @@ const SideDrawer = ({ isMenuOpen, setMenuOpen, headerlinks }) => {
       >
         <div className={cls.drawerHeader}></div>
         <ul className="fcol pad-0">
-          {headerlinks.map((link, i) => (
+          {startLinks.map((link, i) => (
             <NavLink
               exact
               to={link.link}
               key={i}
               className={globalCls.navLink}
               activeClassName={globalCls.navLinkActive}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="w-36p fcc">{link.icon}</span> {link.title}
+            </NavLink>
+          ))}
+        </ul>
+        <ul className="fcol pad-0">
+          {midLinks.map((link, i) => (
+            <NavLink
+              exact
+              to={link.link}
+              key={i}
+              className={globalCls.navLink}
+              activeClassName={globalCls.navLinkActive}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="w-36p fcc">{link.icon}</span> {link.title}
+            </NavLink>
+          ))}
+        </ul>
+        <ul className="fcol pad-0">
+          {endLinks.map((link, i) => (
+            <NavLink
+              exact
+              to={link.link}
+              key={i}
+              className={globalCls.navLink}
+              activeClassName={globalCls.navLinkActive}
+              onClick={() => setMenuOpen(false)}
             >
               <span className="w-36p fcc">{link.icon}</span> {link.title}
             </NavLink>

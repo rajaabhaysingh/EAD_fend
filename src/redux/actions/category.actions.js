@@ -9,7 +9,7 @@ export const getAllCategory = () => {
     });
 
     await axiosIntance
-      .get("/api/category/get")
+      .get("/category/get")
       .then((res) => {
         if (res.status === 200) {
           const { data } = res.data;

@@ -5,20 +5,73 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import { useDispatch } from "react-redux";
+import { fetchLocation } from "../../redux/actions";
+import { IconButton, makeStyles } from "@material-ui/core";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_KEY;
 
-const LocationAutoComplete = ({ icon }) => {
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  input: {
+    height: "32px",
+    width: "100%",
+    borderRadius: "4px",
+    outline: "none",
+    border: "none",
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    padding: "0 8px",
+    boxSizing: "border-box",
+    background: theme.palette.background.bg,
+    color: theme.palette.text.primary,
+  },
+  suggBox: {
+    position: "relative",
+    top: "-1px",
+    width: "calc(100% - 2px)",
+    border: `1px solid ${theme.palette.divider}`,
+    background: theme.palette.background.bg,
+    borderRadius: "4px",
+    zIndex: 2000,
+  },
+  suggestion: {
+    padding: "4px 8px",
+    fontSize: "0.8rem",
+    boxSizing: "border-box",
+    color: theme.palette.text.secondary,
+    cursor: "pointer",
+    "&:hover": {
+      color: theme.palette.primary.main,
+      background: theme.palette.background.paper,
+    },
+  },
+  secTxt: {
+    color: theme.palette.text.secondary,
+    fontSize: "0.8rem",
+    padding: "8px",
+  },
+  locBtn: {
+    marginLeft: "8px",
+    height: "32px",
+    width: "32px",
+    fontSize: "1.2rem",
+    background: theme.palette.background.paper,
+  },
+}));
+
+const LocationAutoComplete = ({ mar, addressForm, setAddressForm }) => {
   const { addToast } = useToasts();
+  const dispatch = useDispatch();
+  const cls = useStyles();
 
   // local state management
-  const [addressPlaceholder, setAddressPlaceholder] = useState("Location");
-
-  const dispatch = useDispatch();
+  const [addressPlaceholder, setAddressPlaceholder] = useState(
+    "Search location"
+  );
+  const [address, setAddress] = useState("");
 
   // Log error status and clear dropdown when Google Maps API returns an error.
   const onError = useCallback((status, clearSuggestions) => {
-    addToast("Google Maps API returned error with status: " + status, {
+    addToast("Location service returned error with status: " + status, {
       appearance: "error",
       autoDismiss: true,
     });
@@ -27,79 +80,52 @@ const LocationAutoComplete = ({ icon }) => {
 
   // limit the results to below constraints only
   const searchOptions = {
-    types: ["address"],
+    types: ["geocode"],
     componentRestrictions: {
       country: ["in"],
     },
   };
 
-  // handleChange
-  const handleChange = useCallback(
-    (add) => {
-      setLocation(() => {
-        return {
-          ...location,
-          address: add,
-        };
-      });
-    },
-    [location, setLocation]
-  );
-
   // handleSelect
-  const handleSelect = useCallback(
-    (add) => {
-      geocodeByAddress(add)
-        .then((results) => getLatLng(results[0]))
-        .then((latLng) => {
-          dispatch();
-        })
-        .catch((error) => {});
-    },
-    [setLocation]
-  );
+  const handleSelect = (add) => {
+    geocodeByAddress(add)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        let locationInfo = {
+          location: { address: add, lat: latLng.lat, long: latLng.lng },
+        };
+
+        setAddress(add);
+
+        if (setAddressForm) {
+          setAddressForm({
+            ...addressForm,
+            addressLine: add,
+            lat: latLng.lat,
+            long: latLng.lng,
+          });
+        } else {
+          localStorage.setItem("location", JSON.stringify(locationInfo));
+
+          // dispatch location action
+          dispatch(fetchLocation(locationInfo));
+        }
+      })
+      .catch((error) => {
+        addToast(error, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
+  };
 
   // --------------------------------------------------
   // ---------LOCATION SEARCH BLOCK STARTS HERE--------
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      if (address) {
-        setLocation(() => {
-          return {
-            ...location,
-            address: "",
-          };
-        });
-      }
-      setAddressPlaceholder(() => {
-        return "Locating...";
-      });
-      navigator.geolocation.getCurrentPosition(showPosition, handleError, {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0,
-      });
-    } else {
-      alert(
-        "This feature isn't supported. Try manually searching the address..."
-      );
-    }
-  };
 
+  // showPosition
   const showPosition = (position) => {
     let posX = position.coords.latitude;
     let posY = position.coords.longitude;
-
-    localStorage.setItem("lat", posX);
-    localStorage.setItem("long", posY);
-
-    setLocation(() => {
-      return {
-        ...location,
-        lat: posX,
-        long: posY,
-      };
-    });
 
     let currentLocation = "";
 
@@ -116,18 +142,36 @@ const LocationAutoComplete = ({ icon }) => {
       .then((response) => {
         currentLocation = response.data.results[0].formatted_address;
         // setting location box status to locating
-        localStorage.setItem("address", currentLocation);
-        setLocation(() => {
-          return {
-            ...location,
+        let locationInfo = {
+          location: {
             address: currentLocation,
-          };
-        });
-        setAddressPlaceholder(() => "Location");
+            lat: posX,
+            long: posY,
+          },
+        };
+
+        setAddress(currentLocation);
+
+        setAddressPlaceholder(() => "Search location");
+
         addToast(currentLocation, {
           appearance: "success",
           autoDismiss: true,
         });
+
+        if (setAddressForm) {
+          setAddressForm({
+            ...addressForm,
+            addressLine: currentLocation,
+            lat: posX,
+            long: posY,
+          });
+        } else {
+          localStorage.setItem("location", JSON.stringify(locationInfo));
+
+          // dispatch location action
+          dispatch(fetchLocation(locationInfo));
+        }
       })
       .catch((error) => {
         addToast(error, {
@@ -171,12 +215,33 @@ const LocationAutoComplete = ({ icon }) => {
     });
   };
 
+  // getLocation
+  const getLocation = () => {
+    if (address) {
+      setAddress("");
+    }
+    if (navigator.geolocation) {
+      setAddressPlaceholder(() => {
+        return "Locating...";
+      });
+      // get geo location with coords
+      navigator.geolocation.getCurrentPosition(showPosition, handleError, {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0,
+      });
+    } else {
+      alert(
+        "This feature isn't supported. Try manually searching the address..."
+      );
+    }
+  };
+
   // ----------LOCATION SEARCH BLOCK ENDS HERE---------
   // --------------------------------------------------
 
   return (
-    <div className="fcc rel f1">
-      <i className="fas fa-map-marker-alt mar_r-8"></i>
+    <div className={mar ? "rel f1 mar_t-32" : "rel f1 mar_t-4"}>
       <PlacesAutocomplete
         value={address}
         onChange={setAddress}
@@ -185,48 +250,47 @@ const LocationAutoComplete = ({ icon }) => {
         searchOptions={searchOptions}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div className="fccc pos_rel f1">
+          <div className={cls.suggBox}>
             <input
               {...getInputProps({
                 placeholder: addressPlaceholder,
-                className: "search_bar_input",
+                className: cls.input,
                 autoFocus: false,
                 required: true,
               })}
             />
-            <div className="search_result add_sugestion_box">
+            <div>
               {loading && (
-                <div className="fsm pad-8">
+                <div className={cls.secTxt}>
                   Loading... <i className="fas fa-circle-notch fa-spin"></i>
                 </div>
               )}
-              {suggestions.map((suggestion) => {
-                const className = "fsm active_menu_opt";
-                return (
-                  <div
-                    key={suggestion.id}
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                    })}
-                  >
-                    <div className="pad_l-16 pad_r-16 pad_b-8 pad_t-8 menu_options cur">
+              {suggestions &&
+                suggestions.map((suggestion, i) => {
+                  return (
+                    <div
+                      key={i}
+                      {...getSuggestionItemProps(suggestion, {
+                        className: cls.suggestion,
+                      })}
+                    >
                       {suggestion.description}
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         )}
       </PlacesAutocomplete>
       {/* location utility btn */}
-      <button
-        className="btn fccc input_assist_btn search_bar_btn_pos cur"
+      <IconButton
         onClick={getLocation}
         type={"button"}
+        color="primary"
+        className={cls.locBtn}
       >
         <i className="fas fa-crosshairs"></i>
-      </button>
+      </IconButton>
     </div>
   );
 };

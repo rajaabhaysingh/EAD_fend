@@ -74,3 +74,5 @@ const Home = ({ helper }) => {
 };
 
 export default Home;
+
+<i className="fas fa-map-marker-alt mar_r-4"></i>;

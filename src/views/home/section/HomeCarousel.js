@@ -5,7 +5,7 @@ import "keen-slider/keen-slider.min.css";
 import { Link } from "react-router-dom";
 
 // styling
-import { Button, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
 
 // components
@@ -60,12 +60,14 @@ const HomeCarousel = ({ banner }) => {
   });
 
   useEffect(() => {
-    sliderRef.current.addEventListener("mouseover", () => {
-      setPause(true);
-    });
-    sliderRef.current.addEventListener("mouseout", () => {
-      setPause(false);
-    });
+    if (sliderRef.current) {
+      sliderRef.current.addEventListener("mouseover", () => {
+        setPause(true);
+      });
+      sliderRef.current.addEventListener("mouseout", () => {
+        setPause(false);
+      });
+    }
   }, [sliderRef]);
 
   useEffect(() => {
@@ -79,7 +81,8 @@ const HomeCarousel = ({ banner }) => {
     };
   }, [pause, slider]);
 
-  return (
+  return banner.getHomeCarouselBannerData &&
+    banner.getHomeCarouselBannerData?.length > 0 ? (
     <div ref={sliderRef} className={clsx("keen-slider", cls.root)}>
       {banner?.getHomeCarouselBannerData?.map((slide, i) => (
         <Link
@@ -95,6 +98,8 @@ const HomeCarousel = ({ banner }) => {
         </Link>
       ))}
     </div>
+  ) : (
+    <div></div>
   );
 };
 

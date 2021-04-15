@@ -3,6 +3,7 @@ import { helperConstants } from "../actions/constants";
 const initialState = {
   themeName: "light",
   fetchLocationData: {},
+  marginTop: false,
 };
 
 export default (state = initialState, action) => {
@@ -18,6 +19,13 @@ export default (state = initialState, action) => {
       state = {
         ...state,
         fetchLocationData: action.payload.locationInfo,
+      };
+      break;
+
+    case helperConstants.MARGIN_CHANGE_REQUEST:
+      state = {
+        ...state,
+        marginTop: action.payload.marginTop,
       };
       break;
 

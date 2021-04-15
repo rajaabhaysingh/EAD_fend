@@ -1,53 +1,47 @@
 import { categoryConstants } from "../actions/constants";
 
 const initialState = {
-  postLoading: false,
-  postData: null,
-  postSuccessful: false,
-  postError: null,
   fetchLoading: false,
   fetchData: [],
+  fetchData_mainOnly: [],
+  fetchData_allList: [],
   fetchSuccessful: false,
   fetchError: null,
-  updateLoading: false,
-  updateData: [],
-  updateSuccessful: false,
-  updateError: null,
-  deleteLoading: false,
-  deleteData: [],
-  deleteSuccessful: false,
-  deleteError: null,
 };
 
-// updateCategoryList
-const updateCategoryList = (oldCatList, newCategory) => {
-  if (!newCategory.parentId) {
-    return [...oldCatList, newCategory];
+// filterMainCatOnly
+const filterMainCatOnly = (catList) => {
+  let mainCatList = [];
+
+  for (let cat of catList) {
+    mainCatList.push({
+      _id: cat._id,
+      categoryName: cat.categoryName,
+      categoryImage: cat.categoryImage,
+      slug: cat.slug,
+    });
   }
 
-  let updatedCatList = [];
+  return mainCatList;
+};
 
-  for (let cat of oldCatList) {
-    if (cat._id === newCategory.parentId) {
-      updatedCatList.push({
-        ...cat,
-        children:
-          cat.children?.length > 0
-            ? [...cat.children, newCategory]
-            : [newCategory],
-      });
-    } else {
-      updatedCatList.push({
-        ...cat,
-        children:
-          cat.children?.length > 0
-            ? updateCategoryList(cat.children, newCategory)
-            : [],
-      });
+// filterAllCat
+const filterAllCat = (catList) => {
+  let allCatList = [];
+
+  for (let cat of catList) {
+    allCatList.push({
+      _id: cat._id,
+      categoryName: cat.categoryName,
+      categoryImage: cat.categoryImage,
+      slug: cat.slug,
+    });
+    if (cat.children?.length > 0) {
+      filterAllCat(cat.children);
     }
   }
 
-  return updatedCatList;
+  return allCatList;
 };
 
 export default (state = initialState, action) => {
@@ -64,6 +58,8 @@ export default (state = initialState, action) => {
       state = {
         ...state,
         fetchData: action.payload.data,
+        fetchData_mainOnly: filterMainCatOnly(action.payload.data),
+        fetchData_allList: filterAllCat(action.payload.data),
         fetchLoading: false,
         fetchSuccessful: true,
         fetchError: null,
@@ -77,91 +73,6 @@ export default (state = initialState, action) => {
         fetchLoading: false,
         fetchSuccessful: false,
         fetchError: action.payload.error,
-      };
-      break;
-
-    case categoryConstants.ADD_CATEGORY_REQUEST:
-      state = {
-        ...state,
-        postLoading: true,
-        postError: null,
-      };
-      break;
-
-    case categoryConstants.ADD_CATEGORY_SUCCESS:
-      state = {
-        ...state,
-        fetchData: updateCategoryList(state.fetchData, action.payload.data),
-        postData: action.payload.data,
-        postLoading: false,
-        postSuccessful: true,
-        postError: null,
-      };
-      break;
-
-    case categoryConstants.ADD_CATEGORY_FAILURE:
-      state = {
-        ...state,
-        postData: null,
-        postLoading: false,
-        postSuccessful: false,
-        postError: action.payload.error,
-      };
-      break;
-
-    case categoryConstants.UPDATE_CAT_REQUEST:
-      state = {
-        ...state,
-        updateLoading: true,
-        updateError: null,
-      };
-      break;
-
-    case categoryConstants.UPDATE_CAT_SUCCESS:
-      state = {
-        ...state,
-        updateData: action.payload.data,
-        updateLoading: false,
-        updateSuccessful: true,
-        updateError: null,
-      };
-      break;
-
-    case categoryConstants.UPDATE_CAT_FAILURE:
-      state = {
-        ...state,
-        updateData: null,
-        updateLoading: false,
-        updateSuccessful: false,
-        updateError: action.payload.error,
-      };
-      break;
-
-    case categoryConstants.DELETE_CAT_REQUEST:
-      state = {
-        ...state,
-        deleteLoading: true,
-        deleteError: null,
-      };
-      break;
-
-    case categoryConstants.DELETE_CAT_SUCCESS:
-      state = {
-        ...state,
-        deleteData: action.payload.data,
-        deleteLoading: false,
-        deleteSuccessful: true,
-        deleteError: null,
-      };
-      break;
-
-    case categoryConstants.DELETE_CAT_FAILURE:
-      state = {
-        ...state,
-        deleteData: null,
-        deleteLoading: false,
-        deleteSuccessful: false,
-        deleteError: action.payload.error,
       };
       break;
 
