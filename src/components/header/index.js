@@ -300,7 +300,7 @@ const Header = ({}) => {
         </form>
         <Hidden mdUp implementation="css">
           <div
-            className={cls.locationText}
+            className={clsx(cls.locationText, "sb_hid")}
             onClick={() => setLocationOpen(true)}
           >
             <i className="fas fa-map-marker-alt mar_r-8"></i>
@@ -568,7 +568,10 @@ const Header = ({}) => {
             </NavLink>
           ))}
         </div>
-        <div className={cls.locationText} onClick={() => setLocationOpen(true)}>
+        <div
+          className={clsx(cls.locationText, "sb_hid")}
+          onClick={() => setLocationOpen(true)}
+        >
           <i className="fas fa-map-marker-alt mar_r-8"></i>
           <span className={globalCls.simpleLabel}>Current location: </span>
           <span className="ellipsis" style={{ maxWidth: "300px" }}>
