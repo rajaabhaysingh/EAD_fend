@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup = ({}) => {
+const Signup = () => {
   // local state management
   const [formState, setFormState] = useState({
     firstName: "",

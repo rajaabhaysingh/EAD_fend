@@ -22,7 +22,7 @@ const useGlobalStyles = makeStyles((theme) => ({
     marginTop: "8px",
   },
   marT16: {
-    marginTop: "16px",
+    marginTop: "16px !important",
   },
   marT32: {
     marginTop: "32px",
