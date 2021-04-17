@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 // icons
 
 // keys
-import { baseURL } from "../../config";
+import { baseUrl } from "../../config";
 
 const useStyles = makeStyles((theme) => ({
   root: {

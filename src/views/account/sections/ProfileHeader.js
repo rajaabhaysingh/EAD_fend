@@ -10,6 +10,9 @@ import RenderStars from "../../../components/ratings/RenderStars";
 import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
 
+// keys
+import { baseUrl } from "../../../config";
+
 // misc
 import { generateName } from "../../../helpers/misc";
 

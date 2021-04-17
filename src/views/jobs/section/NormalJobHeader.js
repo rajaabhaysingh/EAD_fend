@@ -9,6 +9,9 @@ import Loader from "../../../components/loader";
 import { Button, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
 
+// keys
+import { baseUrl } from "../../../config";
+
 // misc
 import { generateName, parseDate } from "../../../helpers/misc";
 import {

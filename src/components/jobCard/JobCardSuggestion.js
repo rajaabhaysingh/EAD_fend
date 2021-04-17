@@ -6,6 +6,9 @@ import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 import { Link } from "react-router-dom";
 
+// keys
+import { baseUrl } from "../../config";
+
 // components
 
 // assets

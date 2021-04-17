@@ -15,6 +15,9 @@ import userPlaceholder from "../../../assets/img/userPlaceholder.svg";
 import { parseDate } from "../../../helpers/misc";
 import { PeopleAlt, Visibility } from "@material-ui/icons";
 
+// keys
+import { baseUrl } from "../../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,

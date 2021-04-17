@@ -5,6 +5,9 @@ import clsx from "clsx";
 // ICONS
 import { Add, Delete, BorderColor } from "@material-ui/icons";
 
+// keys
+import { baseUrl } from "../../../config";
+
 // misc
 import { generateName } from "../../../helpers/misc";
 import netRating from "../../../helpers/netRating";

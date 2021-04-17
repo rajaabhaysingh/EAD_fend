@@ -12,6 +12,9 @@ import Page from "../../../../components/mui/Page";
 import AppJobHeader from "../../components/AppJobHeader";
 import Loader from "../../../../components/loader";
 
+// keys
+import { baseUrl } from "../../../../config";
+
 // assets
 
 // colors

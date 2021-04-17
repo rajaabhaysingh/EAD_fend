@@ -12,6 +12,9 @@ import useGlobalStyles from "../../../styles/globalStyles";
 import { parseDate } from "../../../helpers/misc";
 import { Chat } from "@material-ui/icons";
 
+// keys
+import { baseUrl } from "../../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,

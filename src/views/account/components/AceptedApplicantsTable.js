@@ -38,6 +38,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeAppStatus, initiatePayment } from "../../../redux/actions";
 import PaymentDetailBox from "./PaymentDetailBox";
 
+// keys
+import { baseUrl } from "../../../config";
+
 // --- helper function to download script ---
 // loadScript
 const loadScript = (src) => {

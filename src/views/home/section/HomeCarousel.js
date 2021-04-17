@@ -18,6 +18,9 @@ import useGlobalStyles from "../../../styles/globalStyles";
 
 // redux
 
+// keys
+import { baseUrl } from "../../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,

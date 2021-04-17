@@ -7,6 +7,9 @@ import getInitials from "../../helpers/getInitials";
 import { Avatar, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 
+// keys
+import { baseUrl } from "../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {

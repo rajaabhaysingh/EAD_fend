@@ -3,6 +3,9 @@ import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 import ReactStarsRating from "react-awesome-stars-rating";
 
+// keys
+import { baseUrl } from "../../../config";
+
 import useGlobalStyles from "../../../styles/globalStyles";
 
 // styling
