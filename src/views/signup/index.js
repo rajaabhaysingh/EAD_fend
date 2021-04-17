@@ -126,14 +126,6 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (formState.type === "organization") {
-      setFormState({
-        ...formState,
-        middleName: "",
-        lastName: "",
-      });
-    }
-
     return () => {
       URL.revokeObjectURL(formState.profilePicture);
     };
@@ -209,11 +201,11 @@ const Signup = () => {
 
     formData.append("firstName", formState.firstName);
 
-    if (formState.middleName) {
+    if (formState.type === "individual") {
       formData.append("middleName", formState.middleName);
+      formData.append("lastName", formState.lastName);
     }
 
-    formData.append("lastName", formState.lastName);
     formData.append("email", formState.email);
     formData.append("phone", formState.phone);
     formData.append("password", formState.password);
@@ -239,6 +231,57 @@ const Signup = () => {
       return <Redirect to="/verify-email" />;
     }
   }
+
+  // renderNamesField
+  const renderNamesField = () => {
+    if (formState.type === "individual") {
+      return (
+        <>
+          <TextField
+            label="First name"
+            variant="standard"
+            fullWidth
+            size="small"
+            name="firstName"
+            value={formState.firstName}
+            onChange={(e) => handleChange(e)}
+          />
+          <TextField
+            label="Middle name"
+            variant="standard"
+            fullWidth
+            size="small"
+            name="middleName"
+            value={formState.middleName}
+            onChange={(e) => handleChange(e)}
+            className={globalCls.marL8}
+          />
+          <TextField
+            label="Last name"
+            variant="standard"
+            fullWidth
+            size="small"
+            name="lastName"
+            value={formState.lastName}
+            onChange={(e) => handleChange(e)}
+            className={globalCls.marL8}
+          />
+        </>
+      );
+    } else {
+      return (
+        <TextField
+          label="Organization name"
+          variant="standard"
+          fullWidth
+          size="small"
+          name="firstName"
+          value={formState.firstName}
+          onChange={(e) => handleChange(e)}
+        />
+      );
+    }
+  };
 
   return (
     <Page title="Wilswork | Signup">
@@ -330,51 +373,7 @@ const Signup = () => {
                       labelPlacement="end"
                     />
                   </RadioGroup>
-                  <div className="fc mar_t-16">
-                    {formState.type === "individual" ? (
-                      <>
-                        <TextField
-                          label="First name"
-                          variant="standard"
-                          fullWidth
-                          size="small"
-                          name="firstName"
-                          value={formState.firstName}
-                          onChange={(e) => handleChange(e)}
-                        />
-                        <TextField
-                          label="Middle name"
-                          variant="standard"
-                          fullWidth
-                          size="small"
-                          name="middleName"
-                          value={formState.middleName}
-                          onChange={(e) => handleChange(e)}
-                          className={globalCls.marL8}
-                        />
-                        <TextField
-                          label="Last name"
-                          variant="standard"
-                          fullWidth
-                          size="small"
-                          name="lastName"
-                          value={formState.lastName}
-                          onChange={(e) => handleChange(e)}
-                          className={globalCls.marL8}
-                        />
-                      </>
-                    ) : (
-                      <TextField
-                        label="Organization name"
-                        variant="standard"
-                        fullWidth
-                        size="small"
-                        name="firstName"
-                        value={formState.firstName}
-                        onChange={(e) => handleChange(e)}
-                      />
-                    )}
-                  </div>
+                  <div className="fc mar_t-16">{renderNamesField()}</div>
                   <div className={clsx(globalCls.marT16, "fc")}>
                     <TextField
                       label="Email"
