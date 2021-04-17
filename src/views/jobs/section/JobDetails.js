@@ -18,6 +18,9 @@ import {
 import useGlobalStyles from "../../../styles/globalStyles";
 import { parseDate, timeAgo } from "../../../helpers/misc";
 
+// keys
+import { googlePlacesKey } from "../../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,
@@ -194,7 +197,7 @@ const JobDetails = ({ job }) => {
       <div className={clsx("fsm mar_t-16", cls.mapContainer)}>
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: process.env.REACT_APP_GOOGLE_PLACES_KEY,
+            key: googlePlacesKey,
             region: "in",
             libraries: ["places", "geometry", "drawing", "visualization"],
           }}

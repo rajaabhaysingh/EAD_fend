@@ -213,7 +213,7 @@ export default function CustomPaginationActionsTable({ postings }) {
                 <TableCell align="center" component="th" scope="row">
                   <img
                     className={classes.img}
-                    src={process.env.REACT_APP_BASE_URL + row.jobThumbnail}
+                    src={baseUrl + row.jobThumbnail}
                     alt=""
                   />
                 </TableCell>

@@ -112,8 +112,7 @@ const Overview = () => {
                   className={cls.dp}
                   src={
                     auth?.user?.profilePicture
-                      ? process.env.REACT_APP_BASE_URL +
-                        auth.user.profilePicture
+                      ? baseUrl + auth.user.profilePicture
                       : user
                   }
                   alt=""

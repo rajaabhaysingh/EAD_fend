@@ -138,7 +138,7 @@ const ApplicationDetails = () => {
             {application.getAppByIdData?.coverLetter?.length > 0 ? (
               application.getAppByIdData.coverLetter.map((doc) => (
                 <a
-                  href={`${process.env.REACT_APP_BASE_URL}${doc.file}`}
+                  href={`${baseUrl}${doc.file}`}
                   target="_blank"
                   className={cls.file}
                   key={doc._id}

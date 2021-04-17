@@ -61,8 +61,7 @@ const PostingJobHeader = ({ job }) => {
           <img
             src={
               job.getJobByIdData?.jobThumbnail
-                ? process.env.REACT_APP_BASE_URL +
-                  job.getJobByIdData?.jobThumbnail
+                ? baseUrl + job.getJobByIdData?.jobThumbnail
                 : userPlaceholder
             }
             className={cls.img}

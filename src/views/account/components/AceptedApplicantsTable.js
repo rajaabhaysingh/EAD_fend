@@ -260,7 +260,7 @@ function Row({ row, job }) {
           <div className="fc">
             <Avatar
               className={classes.avatar}
-              src={process.env.REACT_APP_BASE_URL + row.user?.profilePicture}
+              src={baseUrl + row.user?.profilePicture}
             >
               {getInitials(
                 generateName(
@@ -316,7 +316,7 @@ function Row({ row, job }) {
               </div>
               {row.coverLetter.map((doc) => (
                 <a
-                  href={`${process.env.REACT_APP_BASE_URL}${doc.file}`}
+                  href={`${baseUrl}${doc.file}`}
                   target="_blank"
                   className={classes.file}
                   key={doc._id}

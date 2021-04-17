@@ -40,7 +40,7 @@ const Review = ({ review }) => {
     <div className="f mar_t-64">
       <Avatar
         className={classes.avatar}
-        src={process.env.REACT_APP_BASE_URL + review.user?.profilePicture}
+        src={baseUrl + review.user?.profilePicture}
       >
         {getInitials(
           generateName(

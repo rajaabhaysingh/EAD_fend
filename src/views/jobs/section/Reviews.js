@@ -91,7 +91,7 @@ const Reviews = ({ reviews, jobId }) => {
           <form className="f1 mar_t-32" onSubmit={handleAddReview}>
             <Avatar
               className={cls.avatar}
-              src={process.env.REACT_APP_BASE_URL + auth.user?.profilePicture}
+              src={baseUrl + auth.user?.profilePicture}
             >
               {getInitials(
                 generateName(

@@ -92,7 +92,7 @@ const HomeCarousel = ({ banner }) => {
         >
           <img
             className={globalCls.carouselBanner}
-            src={process.env.REACT_APP_BASE_URL + slide.banner}
+            src={baseUrl + slide.banner}
             alt=""
           />
         </Link>

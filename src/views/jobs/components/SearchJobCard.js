@@ -67,7 +67,7 @@ const SearchJobCard = ({ job }) => {
           <div className={globalCls.pctb_moblr}>
             <img
               className={cls.jobThumbnail}
-              src={process.env.REACT_APP_BASE_URL + job.jobThumbnail}
+              src={baseUrl + job.jobThumbnail}
               alt=""
             />
             <div

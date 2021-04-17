@@ -68,7 +68,7 @@ const ProfileHeader = ({ postings, applications }) => {
             className={cls.img}
             src={
               auth.user.profilePicture
-                ? process.env.REACT_APP_BASE_URL + auth.user.profilePicture
+                ? baseUrl + auth.user.profilePicture
                 : userPlaceholder
             }
             alt=""

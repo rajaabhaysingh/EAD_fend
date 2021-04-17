@@ -56,10 +56,7 @@ const PostingJobHeader = ({ application }) => {
       return (
         <div className={clsx(cls.root, globalCls.pclr_mobtb)}>
           <img
-            src={
-              process.env.REACT_APP_BASE_URL +
-              application.getAppByIdData?.job?.jobThumbnail
-            }
+            src={baseUrl + application.getAppByIdData?.job?.jobThumbnail}
             className={cls.img}
             alt=""
           />
