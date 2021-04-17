@@ -14,6 +14,9 @@ import { Link } from "react-router-dom";
 
 // icons
 
+// keys
+import { baseURL } from "../../config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "16px",
@@ -46,7 +49,7 @@ const CategoryCard = ({ category }) => {
       >
         <img
           className={cls.catImg}
-          src={process.env.REACT_APP_BASE_URL + category.categoryImage}
+          src={baseUrl + category.categoryImage}
           alt=""
         />
         <div className={clsx("mar_t-8", "ellipsis", "fwb", globalCls.txtSmSec)}>
