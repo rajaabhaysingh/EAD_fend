@@ -10,9 +10,6 @@ import RenderStars from "../../../components/ratings/RenderStars";
 import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
 
-// keys
-import { baseUrl } from "../../../config";
-
 // misc
 import { generateName } from "../../../helpers/misc";
 
@@ -71,7 +68,7 @@ const ProfileHeader = ({ postings, applications }) => {
             className={cls.img}
             src={
               auth.user.profilePicture
-                ? baseUrl + auth.user.profilePicture
+                ? process.env.REACT_APP_BASE_URL + auth.user.profilePicture
                 : userPlaceholder
             }
             alt=""

@@ -9,9 +9,6 @@ import Page from "../../components/mui/Page";
 import ReCAPTCHA from "react-google-recaptcha";
 import Loader from "../../components/loader";
 
-// keys
-import { googleRecaptchaKey } from "../../config";
-
 // styling
 import {
   FormControl,
@@ -484,7 +481,7 @@ const Signup = ({}) => {
                   </div>
                   <div className="w-100 fcc mar_t-24">
                     <ReCAPTCHA
-                      sitekey={googleRecaptchaKey}
+                      sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                       onChange={captchaPassed}
                       onExpired={captchaFailed}
                       onErrored={captchaFailed}

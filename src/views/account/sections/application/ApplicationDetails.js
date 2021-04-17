@@ -12,9 +12,6 @@ import Page from "../../../../components/mui/Page";
 import AppJobHeader from "../../components/AppJobHeader";
 import Loader from "../../../../components/loader";
 
-// keys
-import { baseUrl } from "../../../../config";
-
 // assets
 
 // colors
@@ -141,7 +138,7 @@ const ApplicationDetails = () => {
             {application.getAppByIdData?.coverLetter?.length > 0 ? (
               application.getAppByIdData.coverLetter.map((doc) => (
                 <a
-                  href={`${baseUrl}${doc.file}`}
+                  href={`${process.env.REACT_APP_BASE_URL}${doc.file}`}
                   target="_blank"
                   className={cls.file}
                   key={doc._id}

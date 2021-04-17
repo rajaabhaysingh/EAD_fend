@@ -3,9 +3,6 @@ import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 import ReactStarsRating from "react-awesome-stars-rating";
 
-// keys
-import { baseUrl } from "../../../config";
-
 import useGlobalStyles from "../../../styles/globalStyles";
 
 // styling
@@ -94,7 +91,7 @@ const Reviews = ({ reviews, jobId }) => {
           <form className="f1 mar_t-32" onSubmit={handleAddReview}>
             <Avatar
               className={cls.avatar}
-              src={baseUrl + auth.user?.profilePicture}
+              src={process.env.REACT_APP_BASE_URL + auth.user?.profilePicture}
             >
               {getInitials(
                 generateName(

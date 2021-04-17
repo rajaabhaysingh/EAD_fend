@@ -12,9 +12,6 @@ import useGlobalStyles from "../../../styles/globalStyles";
 import { parseDate } from "../../../helpers/misc";
 import { Chat } from "@material-ui/icons";
 
-// keys
-import { baseUrl } from "../../../config";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,
@@ -59,7 +56,10 @@ const PostingJobHeader = ({ application }) => {
       return (
         <div className={clsx(cls.root, globalCls.pclr_mobtb)}>
           <img
-            src={baseUrl + application.getAppByIdData?.job?.jobThumbnail}
+            src={
+              process.env.REACT_APP_BASE_URL +
+              application.getAppByIdData?.job?.jobThumbnail
+            }
             className={cls.img}
             alt=""
           />

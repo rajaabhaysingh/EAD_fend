@@ -7,9 +7,6 @@ import getInitials from "../../helpers/getInitials";
 import { Avatar, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 
-// keys
-import { baseUrl } from "../../config";
-
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {
@@ -43,7 +40,7 @@ const Review = ({ review }) => {
     <div className="f mar_t-64">
       <Avatar
         className={classes.avatar}
-        src={baseUrl + review.user?.profilePicture}
+        src={process.env.REACT_APP_BASE_URL + review.user?.profilePicture}
       >
         {getInitials(
           generateName(

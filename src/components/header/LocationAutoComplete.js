@@ -7,9 +7,8 @@ import { useToasts } from "react-toast-notifications";
 import { useDispatch } from "react-redux";
 import { fetchLocation } from "../../redux/actions";
 import { IconButton, makeStyles } from "@material-ui/core";
-import { googlePlacesKey } from "../../config";
 
-const API_KEY = googlePlacesKey;
+const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_KEY;
 
 const useStyles = makeStyles((theme) => ({
   root: {},

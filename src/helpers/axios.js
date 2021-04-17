@@ -1,12 +1,11 @@
 import axios from "axios";
 import { authConstants } from "../redux/actions/constants";
 import store from "../redux/store";
-import { baseUrl } from "../config";
 
 const token = localStorage.getItem("token");
 
 const axiosIntance = axios.create({
-  baseURL: baseUrl,
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     Authorization: token ? `Bearer ${token}` : "",
   },

@@ -38,9 +38,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeAppStatus, initiatePayment } from "../../../redux/actions";
 import PaymentDetailBox from "./PaymentDetailBox";
 
-// keys
-import { baseUrl } from "../../../config";
-
 // --- helper function to download script ---
 // loadScript
 const loadScript = (src) => {
@@ -263,7 +260,7 @@ function Row({ row, job }) {
           <div className="fc">
             <Avatar
               className={classes.avatar}
-              src={baseUrl + row.user?.profilePicture}
+              src={process.env.REACT_APP_BASE_URL + row.user?.profilePicture}
             >
               {getInitials(
                 generateName(
@@ -319,7 +316,7 @@ function Row({ row, job }) {
               </div>
               {row.coverLetter.map((doc) => (
                 <a
-                  href={`${baseUrl}${doc.file}`}
+                  href={`${process.env.REACT_APP_BASE_URL}${doc.file}`}
                   target="_blank"
                   className={classes.file}
                   key={doc._id}

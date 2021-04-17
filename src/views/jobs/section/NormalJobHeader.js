@@ -9,9 +9,6 @@ import Loader from "../../../components/loader";
 import { Button, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
 
-// keys
-import { baseUrl } from "../../../config";
-
 // misc
 import { generateName, parseDate } from "../../../helpers/misc";
 import {
@@ -98,7 +95,9 @@ const NormalJobHeader = ({ job, apply }) => {
       return (
         <div className={clsx(cls.root, globalCls.pclr_mobtb)}>
           <img
-            src={baseUrl + job.getJobByIdData?.jobThumbnail}
+            src={
+              process.env.REACT_APP_BASE_URL + job.getJobByIdData?.jobThumbnail
+            }
             className={cls.img}
             alt=""
           />

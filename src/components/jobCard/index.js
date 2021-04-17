@@ -6,9 +6,6 @@ import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../styles/globalStyles";
 import { Link } from "react-router-dom";
 
-// keys
-import { baseUrl } from "../../config";
-
 // components
 
 // assets
@@ -72,7 +69,7 @@ const JobCard = ({ job }) => {
           <div className={globalCls.pctb_moblr}>
             <img
               className={cls.jobThumbnail}
-              src={baseUrl + job.jobThumbnail}
+              src={process.env.REACT_APP_BASE_URL + job.jobThumbnail}
               alt=""
             />
             <div

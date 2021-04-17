@@ -5,9 +5,6 @@ import clsx from "clsx";
 // ICONS
 import { Add, Delete, BorderColor } from "@material-ui/icons";
 
-// keys
-import { baseUrl } from "../../../config";
-
 // misc
 import { generateName } from "../../../helpers/misc";
 import netRating from "../../../helpers/netRating";
@@ -115,7 +112,8 @@ const Overview = () => {
                   className={cls.dp}
                   src={
                     auth?.user?.profilePicture
-                      ? baseUrl + auth.user.profilePicture
+                      ? process.env.REACT_APP_BASE_URL +
+                        auth.user.profilePicture
                       : user
                   }
                   alt=""

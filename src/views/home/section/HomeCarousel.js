@@ -18,9 +18,6 @@ import useGlobalStyles from "../../../styles/globalStyles";
 
 // redux
 
-// keys
-import { baseUrl } from "../../../config";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,
@@ -95,7 +92,7 @@ const HomeCarousel = ({ banner }) => {
         >
           <img
             className={globalCls.carouselBanner}
-            src={baseUrl + slide.banner}
+            src={process.env.REACT_APP_BASE_URL + slide.banner}
             alt=""
           />
         </Link>
