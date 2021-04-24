@@ -356,7 +356,9 @@ const JobPage = () => {
         <Route path={path} exact>
           {job.getHomeLocalJobsLoading || job.getJobByIdLoading ? (
             <Loader />
-          ) : job.getJobByIdSuccess ? (
+          ) : job.getJobByIdError ? (
+            <Alert>{job.getJobByIdError}</Alert>
+          ) : job.getJobByIdData ? (
             <div className="fcol">
               {renderJobPageRoute()}
               <div className={clsx(globalCls.secContainer, "mar_t-64")}>

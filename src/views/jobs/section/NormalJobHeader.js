@@ -5,6 +5,9 @@ import { useHistory } from "react-router-dom";
 // components
 import Loader from "../../../components/loader";
 
+// asset
+import img_placeholder from "../../../assets/img/img_placeholder.svg";
+
 // styling
 import { Button, makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
@@ -96,7 +99,10 @@ const NormalJobHeader = ({ job, apply }) => {
         <div className={clsx(cls.root, globalCls.pclr_mobtb)}>
           <img
             src={
-              process.env.REACT_APP_BASE_URL + job.getJobByIdData?.jobThumbnail
+              job.getJobByIdData?.jobThumbnail
+                ? process.env.REACT_APP_BASE_URL +
+                  job.getJobByIdData?.jobThumbnail
+                : img_placeholder
             }
             className={cls.img}
             alt=""
