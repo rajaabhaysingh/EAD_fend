@@ -208,7 +208,7 @@ const JobPage = () => {
         <div
           className={clsx(globalCls.pad_8_16, globalCls.pclr_mobtb, "justc")}
         >
-          <Grid container justify="center">
+          <Grid container justify="center" spacing={3}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
               <NormalJobHeader job={job} apply={handleOpen} />
               <JobDesc job={job} />

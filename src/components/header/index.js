@@ -127,7 +127,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.85rem",
     color: theme.palette.primary.main,
     cursor: "pointer",
-    background: "#00000000",
     display: "flex",
     alignItems: "center",
     overflow: "scroll",

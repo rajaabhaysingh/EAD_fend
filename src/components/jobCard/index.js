@@ -99,17 +99,17 @@ const JobCard = ({ job }) => {
                 {job.location_details[0]?.pinCode || "N/A"},{" "}
                 {job.location_details[0]?.cityDistrictTown || "N/A"}
               </div>
-              <div className={clsx(globalCls.txtSmSec, "fwb")}>
+              <div className={clsx(globalCls.txtSmSec, "fwb mar_t-4")}>
                 <i className="fas fa-rupee-sign mar_r-4"></i>{" "}
                 {job.payscale || "N/A"}/{job.payscaleUnit || "N/A"}
               </div>
             </div>
             <div className={clsx(globalCls.pcMarT8, "fcol")}>
-              <div className={globalCls.txtSmSec}>
+              <div className={clsx(globalCls.txtSmSec, "mar_t-4")}>
                 <i className="far fa-user mar_r-4"></i> Vacancy:{" "}
                 {job.reqQty || "N/A"}
               </div>
-              <div className={globalCls.txtSmSec}>
+              <div className={clsx(globalCls.txtSmSec, "mar_t-4")}>
                 <i className="far fa-calendar mar_r-4"></i> Deadline:{" "}
                 {parseDate(job.deadline)}
               </div>
