@@ -149,7 +149,7 @@ const Account = () => {
               </NavLink>
             </div>
           </Hidden>
-          <div className={cls.accountBase}>
+          <div className={clsx(cls.accountBase, "sb_hid")}>
             {application.getApplicationsLoading ||
             postings.getPostingsLoading ? (
               <Loader />

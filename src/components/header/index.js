@@ -590,7 +590,7 @@ const Header = ({}) => {
         onClose={() => setLocationOpen(false)}
         className="fccc"
       >
-        <div className={cls.modal}>
+        <div className={clsx(cls.modal, "sb_hid")}>
           <div className={globalCls.txtLgSec}>
             <strong>Select your location</strong>
           </div>

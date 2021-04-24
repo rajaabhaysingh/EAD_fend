@@ -187,7 +187,7 @@ const SideDrawer = ({ isMenuOpen, setMenuOpen }) => {
         ref={sideDrawerRef}
         className={
           isMenuOpen
-            ? clsx(cls.sideDrawerBase, cls.sideDrawerOpen)
+            ? clsx(cls.sideDrawerBase, cls.sideDrawerOpen, "sb_hid")
             : cls.sideDrawerBase
         }
       >

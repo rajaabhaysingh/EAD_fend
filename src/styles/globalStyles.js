@@ -87,6 +87,7 @@ const useGlobalStyles = makeStyles((theme) => ({
     top: "92px",
     left: "0",
     overflow: "scroll",
+    scrollbarWidth: "none",
     [theme.breakpoints.down("sm")]: {
       top: "60px",
       height: "calc(100% - 60px)",
@@ -207,6 +208,7 @@ const useGlobalStyles = makeStyles((theme) => ({
   pcOfScr: {
     [theme.breakpoints.up("xs")]: {
       overflow: "scroll",
+      scrollbarWidth: "none",
     },
   },
   pcTimeAgo: {
