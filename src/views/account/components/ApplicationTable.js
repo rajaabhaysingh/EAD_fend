@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import Loader from "../../../components/loader";
 
 import img_placeholder from "../../../assets/img/img_placeholder.svg";
+import { useSelector } from "react-redux";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -175,6 +176,8 @@ export default function CustomPaginationActionsTable({ applications }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(-1);
   const [rows, setRows] = React.useState([]);
 
+  console.log(applications);
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -194,98 +197,96 @@ export default function CustomPaginationActionsTable({ applications }) {
     }
   }, [applications?.getApplicationsData]);
 
-  return applications ? (
-    rows.length > 0 ? (
-      <TableContainer>
-        <Table
-          size="small"
-          className={classes.table}
-          aria-label="custom pagination table"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Job Icon</TableCell>
-              <TableCell>Job name</TableCell>
-              <TableCell>Applied on</TableCell>
-              <TableCell>Pay scale</TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row) => (
-              <StyledTableRow
-                key={row._id}
-                onClick={() =>
-                  history.push(`/account/my-applications/${row._id}`)
-                }
-              >
-                <TableCell align="center" component="th" scope="row">
-                  <img
-                    className={classes.img}
-                    src={
-                      row?.job?.jobThumbnail
-                        ? process.env.REACT_APP_BASE_URL + row.job.jobThumbnail
-                        : img_placeholder
-                    }
-                    alt=""
-                  />
-                </TableCell>
-                <TableCell className={classes.name} component="th" scope="row">
-                  {row.job.name}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {parseDate(row.createdAt)}
-                </TableCell>
-                <TableCell className={classes.name} component="th" scope="row">
-                  ₹ {row.job.payscale}/{row.job.payscaleUnit}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.status === "accepted" ? (
-                    <div className={classes.success}>ACCEPTED</div>
-                  ) : row.status === "rejected" ? (
-                    <div className={classes.rejected}>REJECTED</div>
-                  ) : (
-                    <div className={classes.applied}>APPLIED</div>
-                  )}
-                </TableCell>
-              </StyledTableRow>
-            ))}
-
-            {emptyRows > 0 && (
-              <StyledTableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </StyledTableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
-    ) : (
-      <Alert className="f1 mar_t-16" severity="info">
-        <AlertTitle>NO APPLICATIONS AVAILABLE</AlertTitle>
-        It seems that you have not applied under any jobs yet.
-      </Alert>
-    )
-  ) : (
+  return !applications ? (
     <Loader />
+  ) : rows.length > 0 ? (
+    <TableContainer>
+      <Table
+        size="small"
+        className={classes.table}
+        aria-label="custom pagination table"
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">Job Icon</TableCell>
+            <TableCell>Job name</TableCell>
+            <TableCell>Applied on</TableCell>
+            <TableCell>Pay scale</TableCell>
+            <TableCell>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row) => (
+            <StyledTableRow
+              key={row._id}
+              onClick={() =>
+                history.push(`/account/my-applications/${row._id}`)
+              }
+            >
+              <TableCell align="center" component="th" scope="row">
+                <img
+                  className={classes.img}
+                  src={
+                    row?.job?.jobThumbnail
+                      ? process.env.REACT_APP_BASE_URL + row.job.jobThumbnail
+                      : img_placeholder
+                  }
+                  alt=""
+                />
+              </TableCell>
+              <TableCell className={classes.name} component="th" scope="row">
+                {row.job?.name || "N/A"}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {parseDate(row.createdAt)}
+              </TableCell>
+              <TableCell className={classes.name} component="th" scope="row">
+                ₹ {row.job?.payscale || "N/A"}/{row.job?.payscaleUnit || "N/A"}
+              </TableCell>
+              <TableCell component="th" scope="row">
+                {row.status === "accepted" ? (
+                  <div className={classes.success}>ACCEPTED</div>
+                ) : row.status === "rejected" ? (
+                  <div className={classes.rejected}>REJECTED</div>
+                ) : (
+                  <div className={classes.applied}>APPLIED</div>
+                )}
+              </TableCell>
+            </StyledTableRow>
+          ))}
+
+          {emptyRows > 0 && (
+            <StyledTableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </StyledTableRow>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: { "aria-label": "rows per page" },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
+  ) : (
+    <Alert className="f1 mar_t-16" severity="info">
+      <AlertTitle>NO APPLICATIONS AVAILABLE</AlertTitle>
+      It seems that you have not applied under any jobs yet.
+    </Alert>
   );
 }
