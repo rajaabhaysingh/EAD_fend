@@ -226,7 +226,7 @@ export default function CustomPaginationActionsTable({ applications }) {
                   <img
                     className={classes.img}
                     src={
-                      row.job.jobThumbnail
+                      row?.job?.jobThumbnail
                         ? process.env.REACT_APP_BASE_URL + row.job.jobThumbnail
                         : img_placeholder
                     }
