@@ -233,7 +233,7 @@ const JobPage = () => {
                 <PostJobCard />
                 <div className={cls.heading}>Suggested jobs</div>
                 <Divider className="mar_b-20" />
-                {job.getHomeLocalJobsData?.map((job) => (
+                {job.getHomeLocalJobsData?.jobs?.map((job) => (
                   <JobCardSuggestion job={job} key={job._id} />
                 ))}
               </div>
