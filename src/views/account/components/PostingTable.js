@@ -20,6 +20,8 @@ import { isExpired } from "../../../helpers/misc";
 import { useHistory } from "react-router-dom";
 import Loader from "../../../components/loader";
 
+import img_placeholder from "../../../assets/img/img_placeholder.svg";
+
 const useStyles1 = makeStyles((theme) => ({
   root: {
     flexShrink: 0,
@@ -213,7 +215,11 @@ export default function CustomPaginationActionsTable({ postings }) {
                 <TableCell align="center" component="th" scope="row">
                   <img
                     className={classes.img}
-                    src={process.env.REACT_APP_BASE_URL + row.jobThumbnail}
+                    src={
+                      row.jobThumbnail
+                        ? process.env.REACT_APP_BASE_URL + row.jobThumbnail
+                        : img_placeholder
+                    }
                     alt=""
                   />
                 </TableCell>

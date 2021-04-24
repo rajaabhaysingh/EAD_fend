@@ -20,6 +20,8 @@ import { parseDate } from "../../../helpers/misc";
 import { useHistory } from "react-router-dom";
 import Loader from "../../../components/loader";
 
+import img_placeholder from "../../../assets/img/img_placeholder.svg";
+
 const useStyles1 = makeStyles((theme) => ({
   root: {
     flexShrink: 0,
@@ -223,7 +225,11 @@ export default function CustomPaginationActionsTable({ applications }) {
                 <TableCell align="center" component="th" scope="row">
                   <img
                     className={classes.img}
-                    src={process.env.REACT_APP_BASE_URL + row.job.jobThumbnail}
+                    src={
+                      row.job.jobThumbnail
+                        ? process.env.REACT_APP_BASE_URL + row.job.jobThumbnail
+                        : img_placeholder
+                    }
                     alt=""
                   />
                 </TableCell>
