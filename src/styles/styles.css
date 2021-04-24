@@ -119,7 +119,7 @@
   scrollbar-width: none;
 }
 .of_scr {
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .of_hid {
   overflow: hidden;

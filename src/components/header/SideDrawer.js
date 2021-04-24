@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     width: "70vw",
     maxWidth: "280px",
-    overflow: "scroll",
+    overflowY: "scroll",
     position: "absolute",
     top: "0",
     left: "0",

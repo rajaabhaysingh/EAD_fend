@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     height: "calc(100% - 60px)",
     boxSizing: "border-box",
     position: "fixed",
-    overflow: "scroll",
+    overflowY: "scroll",
     top: "60px",
     left: "0",
     display: "flex",
@@ -423,7 +423,7 @@ const SearchFilters = () => {
               </div>
             </div>
             <div className={clsx("fcol", cls.filterValues)}>
-              <div className="fcol f1 pad-8 of_scr">
+              <div className="fcol f1 pad-8 of_scr sb_hid">
                 {renderFilterOptions()}
               </div>
               <div className="fcbw pad-8">

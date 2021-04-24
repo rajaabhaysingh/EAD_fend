@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     width: "100%",
-    overflow: "scroll",
+    overflowY: "scroll",
   },
 }));
 
@@ -87,7 +87,7 @@ const Account = () => {
             : globalCls.bodyRoot
         }
       >
-        <div className="f h-100 of_scr">
+        <div className="f h-100 of_scr sb_hid">
           <Hidden smDown>
             <div className={clsx("fcolbw", cls.sideNav)}>
               <div className="fcol">

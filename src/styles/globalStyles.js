@@ -86,7 +86,7 @@ const useGlobalStyles = makeStyles((theme) => ({
     position: "absolute",
     top: "92px",
     left: "0",
-    overflow: "scroll",
+    overflowY: "scroll",
     scrollbarWidth: "none",
     [theme.breakpoints.down("sm")]: {
       top: "60px",
