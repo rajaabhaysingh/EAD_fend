@@ -7,10 +7,17 @@ import Page from "../../../components/mui/Page";
 // styling
 import { makeStyles } from "@material-ui/core";
 import useGlobalStyles from "../../../styles/globalStyles";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.bg,
+  },
+  mar: {
+    margin: "24px",
+    [theme.breakpoints.down("sm")]: {
+      margin: "8px",
+    },
   },
 }));
 
@@ -24,7 +31,9 @@ const Messages = () => {
       <Route path={path} exact>
         <Page title="Wilswork | Account Messages">
           <div className={cls.root}>
-            Mr. Patil, if you're looking this... Rem! you had to do it :P.
+            <Alert severity="warning" className={cls.mar}>
+              This page is under construction. Check back later.
+            </Alert>
           </div>
         </Page>
       </Route>

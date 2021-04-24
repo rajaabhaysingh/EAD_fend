@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 // components
 
 // assets
+import img_placeholder from "../../assets/img/img_placeholder.svg";
 
 // colors
 
@@ -69,7 +70,11 @@ const JobCard = ({ job }) => {
           <div className={globalCls.pctb_moblr}>
             <img
               className={cls.jobThumbnail}
-              src={process.env.REACT_APP_BASE_URL + job.jobThumbnail}
+              src={
+                job.jobThumbnail
+                  ? process.env.REACT_APP_BASE_URL + job.jobThumbnail
+                  : img_placeholder
+              }
               alt=""
             />
             <div
