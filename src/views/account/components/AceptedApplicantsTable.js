@@ -33,10 +33,17 @@ import netRating from "../../../helpers/netRating";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { Chat } from "@material-ui/icons";
 
+import PaymentDetailBox from "./PaymentDetailBox";
+import { useHistory } from "react-router";
+
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeAppStatus, initiatePayment } from "../../../redux/actions";
-import PaymentDetailBox from "./PaymentDetailBox";
+import {
+  changeAppStatus,
+  initiatePayment,
+  startConversation,
+  clearConversationState,
+} from "../../../redux/actions";
 
 // --- helper function to download script ---
 // loadScript
@@ -152,8 +159,10 @@ function Row({ row, job }) {
   const classes = useRowStyles();
   const globalCls = useGlobalStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const payment = useSelector((state) => state.payment);
+  const message = useSelector((state) => state.message);
 
   // handleChange
   const handleChange = (event) => {
@@ -227,6 +236,13 @@ function Row({ row, job }) {
   };
   // =======================================
 
+  // initiateConversation
+  const initiateConversation = () => {
+    // dispatch new conversation action
+
+    dispatch(startConversation(row.user?._id));
+  };
+
   // renderStatus
   const renderStatus = (status) => {
     if (status === "applied") {
@@ -247,6 +263,14 @@ function Row({ row, job }) {
       );
     }
   };
+
+  // check whether new conversation initialization was successful
+  if (message.startConversationSuccess) {
+    // clear state
+    dispatch(clearConversationState());
+
+    history.push("/account/messages");
+  }
 
   return (
     <React.Fragment>
@@ -288,7 +312,7 @@ function Row({ row, job }) {
           <IconButton
             color="primary"
             aria-label="expand row"
-            onClick={() => {}}
+            onClick={initiateConversation}
           >
             <Chat />
           </IconButton>

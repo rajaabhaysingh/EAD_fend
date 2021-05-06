@@ -10,6 +10,7 @@ import applicationsReducers from "./applications.reducers";
 import profileReducers from "./profile.reducers";
 import searchReducers from "./search.reducers";
 import paymentReducers from "./payment.reducers";
+import messageReducers from "./message.reducers";
 
 const rootReducer = combineReducers({
   helper: helperReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   profile: profileReducers,
   search: searchReducers,
   payment: paymentReducers,
+  message: messageReducers,
 });
 
 export default rootReducer;

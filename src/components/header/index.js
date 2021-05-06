@@ -481,7 +481,10 @@ const Header = ({}) => {
                       <div className="fs mar_l-12">Notifications</div>
                     </div>
                   </MenuItem>
-                  <MenuItem className={globalCls.menuItemPri}>
+                  <MenuItem
+                    className={globalCls.menuItemPri}
+                    onClick={() => history.push("/account/messages")}
+                  >
                     <div className="fc fsm">
                       <EmailTwoTone color="primary" />
                       <div className="fs mar_l-12">Messages</div>

@@ -9,3 +9,4 @@ export * from "./application.actions";
 export * from "./profile.actions";
 export * from "./search.actions";
 export * from "./order.actions";
+export * from "./message.actions";
