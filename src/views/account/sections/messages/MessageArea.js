@@ -153,7 +153,7 @@ const MessageArea = ({ setShowMsgList, selectedConv }) => {
   // getting out target user from conversation members list
   let targetUser = undefined;
 
-  for (const member of selectedConv.members) {
+  for (const member of selectedConv?.members) {
     if (member._id != auth.user?._id) {
       targetUser = member;
     }
